@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
 
         unset($_POST);
         unset($_REQUEST);
+        header("Location: index.php");
     } catch (Exception $e) {
         // En cas d'erreur, on affiche un message et on arrête tout
         die('Erreur : ' . $e->getMessage());

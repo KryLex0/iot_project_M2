@@ -86,7 +86,8 @@ function getWeatherData($mysqlClient){
     $longitude_user = $addressData[0]["longitude_user"];
     $latitude_user = $addressData[0]["latitude_user"];
 
-    $url     = "https://api.open-meteo.com/v1/forecast?longitude=$longitude_user&latitude=$latitude_user&hourly=temperature_2m,relativehumidity_2m,windspeed_10m";
+    //https://open-meteo.com/en/docs
+    $url     = "https://api.open-meteo.com/v1/forecast?longitude=$longitude_user&latitude=$latitude_user&hourly=temperature_2m,relativehumidity_2m,windspeed_10m,precipitation,rain";
 
     // Create a curl call
     $ch      = curl_init();

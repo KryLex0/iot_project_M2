@@ -56,41 +56,152 @@ function getChart(chartType) {
     weatherData = [{}];
     dataToPush = {}
     finalArray = [];
+    stripLineData = [{}];
+    
 
-    if(chartType == "temperature"){
+    //const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const dayName = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+
+    //init stripLine with first day of week
+    dateFormated = new Date(reponse.hourly.time[0]);
+    dayDate = dayName[dateFormated.getDay()];
+    stripLineData.push(
+      {
+        value: i,
+        label: dayDate
+      }
+    )
+
+    const currentDate = new Date();
+    const currentDay = currentDate.getDay();
+    const currentHour = currentDate.getHours();
+    //console.log(dateFormated.getDay() + " :: " + currentDay);
+    //console.log(dateFormated);// + " :: " + currentHour);
+    if (chartType == "temperature") {
+
+      var i = 0;
+
       temperature_data = reponse.hourly.temperature_2m;
       for (const data1 in temperature_data) {
-  
-        console.log(temperature_data[data1])
-        dataToPush = { y: temperature_data[data1]}
+        dateFormated = new Date(reponse.hourly.time[i]);
+
+        if (i % 24 == 0) {
+          dayDate = dayName[dateFormated.getDay()] + " " + dateFormated.getDate() + "/" + dateFormated.getMonth();
+          stripLineData.push(
+            {
+              value: data1,
+              label: dayDate
+            }
+          );
+          if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+              dataToPush = { y: temperature_data[data1], label: dayDate, indexLabel: "Now", markerColor: "red" };
+          }
+        } else {
+          if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+            dataToPush = { y: temperature_data[data1], label: dayDate, indexLabel: "Now", markerColor: "red" };
+          } else {
+            dataToPush = { y: temperature_data[data1], label: dayDate };
+          }
+        }
         weatherData.push(dataToPush);
-  
+        i += 1;
       }
-      generateChart(weatherData, chartType)
+      generateChart(weatherData, chartType, stripLineData)
       
-    }else if(chartType == "humidity"){
+    } else if (chartType == "humidity") {
+      var i = 0;
       humidity_data = reponse.hourly.relativehumidity_2m;
       xVal = 10
       for (const data1 in humidity_data) {
+        dateFormated = new Date(reponse.hourly.time[i]);
+        
+        if (i % 24 == 0) {
+          dayDate = dayName[dateFormated.getDay()] + " " + dateFormated.getDate() + "/" + dateFormated.getMonth();
+          stripLineData.push(
+            {
+              value: data1,
+              label: dayDate
+            }
+          );
+          //dataToPush = { x: xVal, y: humidity_data[data1], indexLabel: "\u2191 " + dayDate, markerColor: "red" };
+        }// else {
+        //}
+        //dataToPush = { x: xVal, y: humidity_data[data1] }
+        if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+          dataToPush = { x: xVal, y: humidity_data[data1], indexLabel: "Now", markerColor: "red" };
+        } else {
+          dataToPush = { x: xVal, y: humidity_data[data1] }
+        }
+        i += 1;
 
-        console.log(humidity_data[data1])
-
-        dataToPush = { x: xVal, y: humidity_data[data1] }
         weatherData.push(dataToPush);
         xVal += 10
       }
-      generateChart(weatherData, chartType)
+      generateChart(weatherData, chartType, stripLineData)
 
-    }else if(chartType == "windspeed"){
+    } else if (chartType == "windspeed") {
+      var i = 0;
       windspeed_data = reponse.hourly.windspeed_10m;
       for (const data1 in windspeed_data) {
-        console.log(windspeed_data[data1])
-        //dataToPush = { y: windspeed_data[data1]}
+        dateFormated = new Date(reponse.hourly.time[i]);
 
-        dataToPush = { x: data1, y: windspeed_data[data1] }
+        if (i % 24 == 0) {
+          dayDate = dayName[dateFormated.getDay()] + " " + dateFormated.getDate() + "/" + dateFormated.getMonth();
+          //echo("i: " + i);
+          // stripLineData.push(
+          //   {
+          //     value: windspeed_data[data1],
+          //     label: dayDate
+          //   }
+          // );
+          //dataToPush = { x: data1, y: windspeed_data[data1], indexLabel: "\u2191 " + dayDate, markerColor: "red" };
+        } //else {
+        //}
+        if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+          dataToPush = { x: data1, y: windspeed_data[data1], indexLabel: "Now", markerColor: "red" };
+        } else {
+          dataToPush = { x: data1, y: windspeed_data[data1] }
+        }
+        
+        //dataToPush = { x: data1, y: windspeed_data[data1] }
+        i += 1;
+
+
         weatherData.push(dataToPush);
       }
-      generateChart(weatherData, chartType)
+      generateChart(weatherData, chartType, stripLineData)
+
+    } else if (chartType == "precipitation") {
+      var i = 0;
+      precipitation_data = reponse.hourly.precipitation;
+      for (const data1 in precipitation_data) {
+        dateFormated = new Date(reponse.hourly.time[i]);
+
+        if (i % 24 == 0) {
+          dayDate = dayName[dateFormated.getDay()] + " " + dateFormated.getDate() + "/" + dateFormated.getMonth();
+          stripLineData.push(
+            {
+              value: data1,
+              label: dayDate
+            }
+          );
+
+
+          if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+            dataToPush = { y: precipitation_data[data1], label: dayDate, indexLabel: "Now", markerColor: "red" };
+          }
+        } else {
+          if (dayName[dateFormated.getDay()] == dayName[currentDay] && dateFormated.getHours() == currentHour) {
+            dataToPush = { y: precipitation_data[data1], label: dayDate, indexLabel: "Now", markerColor: "red" };
+          } else {
+            dataToPush = { y: precipitation_data[data1], label: dayDate }
+          }
+      }
+        weatherData.push(dataToPush);
+        i += 1;
+
+      }
+      generateChart(weatherData, chartType, stripLineData)
 
     }
     
@@ -101,7 +212,7 @@ function getChart(chartType) {
   
   }
 
-  function generateChart(weatherData, chartType){
+function generateChart(weatherData, chartType, stripLineData){
     if(chartType=="temperature"){
       var chart = new CanvasJS.Chart("chartContainer", {
         animationEnabled: true,
@@ -114,6 +225,9 @@ function getChart(chartType) {
         }],
         axisY: {
           suffix: " °C"
+        },
+        axisX: {
+          stripLines: stripLineData
         },
         data: [{        
           type: "line",
@@ -129,7 +243,7 @@ function getChart(chartType) {
         animationEnabled: true,
         exportEnabled: true,
         theme: "light1", // "light1", "light2", "dark1", "dark2"
-        title:{
+        title: {
           text: "Humidity Chart"
         },
         subtitles: [{
@@ -138,9 +252,13 @@ function getChart(chartType) {
         axisY: {
           suffix: " %"
         },
-          axisY: {
-            includeZero: true
-          },
+        axisY: {
+          includeZero: true
+        },
+        /*
+        axisX: {
+          stripLines: stripLineData
+        },*/
         data: [{
           type: "column", //change type to bar, line, area, pie, etc
           //indexLabel: "{y}", //Shows y value on all Data Points
@@ -165,6 +283,9 @@ function getChart(chartType) {
         axisY: {
           suffix: " km/h"
         },
+        axisX: {
+          stripLines: stripLineData
+        },
         toolTip: {
           shared: true
         },
@@ -181,6 +302,29 @@ function getChart(chartType) {
       chart.render();
 
 
+    } else if (chartType == "precipitation") {
+      var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "green",
+        title: {
+          text: "Precipitation Chart"
+        },
+        subtitles: [{
+          text: "(next 7 days)"
+        }],
+        axisY: {
+          suffix: " °C"
+        },
+        axisX: {
+          stripLines: stripLineData
+        },
+        data: [{
+          type: "line",
+          indexLabelFontSize: 16,
+          dataPoints: weatherData
+        }]
+      });
+      chart.render();
     }
     
 
