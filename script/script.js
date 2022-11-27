@@ -4,6 +4,7 @@ $( document ).ready(function() {
     console.log( "ready!" );
     activeLinkFunc();
     getChart("temperature");
+    getChartSummary();
 });
 
 
@@ -39,6 +40,10 @@ function switchChartType(){
   var value = e.options[e.selectedIndex].value;
   console.log(value)
   getChart(value);
+}
+
+function displayChartSummary(){
+  getChartSummary();
 }
 
 function getChart(chartType) {
@@ -329,3 +334,167 @@ function generateChart(weatherData, chartType, stripLineData){
     
 
   }
+
+
+
+
+//*******************************************************//
+
+
+function getChartSummary() {
+  //https://canvasjs.com/javascript-charts/
+  
+  //pour la temperature
+  //https://canvasjs.com/javascript-charts/chart-image-overlay/
+    $.ajax({
+      type: "POST",
+      url: "databaseFunctions.php",
+      data: {chartSummary: "weatherData"}
+    }).done(function (data) {
+      var reponse = JSON.parse(data)
+      //console.log(reponse);
+      // console.log(reponse[0].date_time);
+      // console.log(reponse[0].minTemp);
+      // console.log(reponse[0].maxTemp);
+      // console.log(reponse[0].minHumidity);
+      // console.log(reponse[0].maxHumidity);
+      // console.log(reponse[0].rain);
+
+      weatherData = [];
+      dataToPush = {}
+      finalArray = [];
+      maxTempSummary = 0;
+      minTempSummary = 0;
+      
+  
+      //const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const dayName = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+  
+      
+      //console.log(dayDate);
+
+
+      var i = 0;
+
+      for (const data1 in reponse) {
+        //reponse[data1]
+
+        //init stripLine with first day of week
+        dateFormated = new Date(Date.parse(reponse[data1].date_time));
+        dayDate = dayName[dateFormated.getDay()];
+
+        if(reponse[data1].rain < 0.4){
+          rainData = "sunny";
+        } else if (reponse[data1].rain < 0.7){
+          rainData = "cloudy";
+        } else {
+          rainData = "rainy";
+        }
+
+        if(reponse[data1].maxTemp > maxTempSummary){
+          maxTempSummary = reponse[data1].maxTemp;
+        }
+        if(reponse[data1].minTemp < minTempSummary){
+          minTempSummary = reponse[data1].minTemp;
+        }
+
+        if(data1 == 0){
+          dataToPush = { 
+            y: [+(reponse[data1].minTemp), +(reponse[data1].maxTemp)],
+            label: dayDate,
+            name: rainData,
+            indexLabel: "Today",
+            markerColor: "red"
+          };
+        } else {
+          dataToPush = { 
+            y: [+(reponse[data1].minTemp), +(reponse[data1].maxTemp)],
+            label: dayDate,
+            name: rainData
+          };
+        }
+
+        weatherData.push(dataToPush);
+
+      }
+      console.log(weatherData);
+      //set max temp for chart with little margin
+      maxTempSummary = +(maxTempSummary) + 5;
+      minTempSummary = +(minTempSummary) - 1;
+      generateChartSummary(weatherData, maxTempSummary, minTempSummary)
+        
+  
+    });
+    
+    }
+  
+  function generateChartSummary(weatherData, maxTempSummary, minTempSummary){
+    var chart = new CanvasJS.Chart("chartContainerSummary", {
+      title:{
+        text: "Temperature Chart"
+      },
+      subtitles: [{
+        text: "(next 7 days)"
+      }],
+      axisY: {
+        suffix: " °C",
+        gridThickness: 0,
+        maximum: maxTempSummary,
+        minimum: minTempSummary
+      },
+      toolTip:{
+        shared: true,
+        content: "{name} </br> <strong>Temperature: </strong> </br> Min: {y[0]} °C, Max: {y[1]} °C"
+      },
+      data: [{
+        type: "rangeSplineArea",
+        fillOpacity: 0.1,
+        color: "#91AAB1",
+        indexLabelFormatter: formatter,
+        dataPoints: weatherData
+      }]
+    });
+    chart.render();
+    addImages(chart);
+
+}
+
+var images = [];    
+
+function addImages(chart) {
+	for(var i = 0; i < chart.data[0].dataPoints.length; i++){
+		var dpsName = chart.data[0].dataPoints[i].name;
+		if(dpsName == "cloudy"){
+			images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/cloudy.png"));
+		} else if(dpsName == "rainy"){
+		images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/rainy.png"));
+		} else if(dpsName == "sunny"){
+			images.push($("<img>").attr("src", "https://canvasjs.com/wp-content/uploads/images/gallery/gallery-overview/sunny.png"));
+		}
+  
+	images[i].attr("class", dpsName).appendTo($("#chartContainerSummary>.canvasjs-chart-container"));
+	positionImage(chart, images[i], i);
+	}
+}
+
+function positionImage(chart, image, index) {
+	var imageCenter = chart.axisX[0].convertValueToPixel(chart.data[0].dataPoints[index].x);
+	var imageTop =  chart.axisY[0].convertValueToPixel(chart.axisY[0].maximum);
+
+	image.width("40px")
+	.css({ "left": imageCenter - 20 + "px",
+	"position": "absolute","top":imageTop + "px",
+	"position": "absolute"});
+}
+
+
+function formatter(e) { 
+	if(e.index === 0 && e.dataPoint.x === 0) {
+		return " Min " + e.dataPoint.y[e.index] + "°";
+	} else if(e.index == 1 && e.dataPoint.x === 0) {
+		return " Max " + e.dataPoint.y[e.index] + "°";
+	} else{
+		return e.dataPoint.y[e.index] + "°";
+	}
+} 
+

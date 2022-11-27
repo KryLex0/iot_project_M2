@@ -7,6 +7,7 @@
    <script src="script/script.js"></script>
    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+   <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>  
    <link rel="stylesheet" href="style/style.css">
 
    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -29,11 +30,19 @@ $addressData = getAddressData($mysqlClient);
 
 <body>
    <div class="containerDiv">
-      <div class="container homePage" style="display: none;">
+      <div class="container homePage">
          <p>HOME PAGE</p>
+         <div id="chartContainerSummary" style="height: auto; width: auto;"></div>
+
+         <?php
+         
+         $mysqlClient = $mysqlClient;
+         //updateWeatherData($mysqlClient);
+         
+         ?>
       </div>
 
-      <div class="container graphPage" id="graphPage">
+      <div class="container graphPage" id="graphPage" style="display: none;">
          <p>PAGE graphique</p>
          <label for="labelChartType">Choix des données à afficher</label>
 
@@ -43,7 +52,11 @@ $addressData = getAddressData($mysqlClient);
             <!-- <option value="windspeed">Vent</option> -->
             <option value="precipitation">Précipitation</option>
          </select>
-
+         <br>
+         <label>Date de début</label>   
+         <input type="date" style="width:100px" name="inputChartDate" id="inputChartDate" onchange="switchChartDate()">
+         <label>Date de fin</label>
+         <input type="date" style="width:100px" name="inputChartDateEnd" id="inputChartDateEnd" onchange="switchChartDate()">
          <?php
          //$weatherArrayData = getWeatherData($mysqlClient);
          //print_r($weatherArrayData["hourly"]["time"]); //heures 7 jours
@@ -96,7 +109,7 @@ $addressData = getAddressData($mysqlClient);
 
    <div class="navigation">
       <ul>
-         <li class="list">
+         <li class="list active">
             <a href="#homePage" onclick="getPageMenu('homePage')">
                <span class="icon">
                   <ion-icon name="home-outline"></ion-icon>
@@ -104,7 +117,7 @@ $addressData = getAddressData($mysqlClient);
                <span class="text">Home</span>
             </a>
          </li>
-         <li class="list active">
+         <li class="list">
             <a href="#graphPage" onclick="getPageMenu('graphPage')">
                <span class="icon">
                   <ion-icon name="analytics-outline"></ion-icon>

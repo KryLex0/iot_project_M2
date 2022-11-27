@@ -16,13 +16,22 @@ if(isset($_POST["chart"])){
     }
 }
 
+if(isset($_POST["chartSummary"])){
+    $chart = $_POST["chartSummary"];
+    if($chart=="weatherData"){
+        print_r(json_encode(getWeatherDataSummaryDB($mysqlClient)));
+    }
+}
+
 
 function checkAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user){
     $resultAddressData = getAddressData($mysqlClient);
     if($resultAddressData){
         updateAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user);
+        updateWeatherData($mysqlClient);
     }else{
         insertAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user);
+        insertWeatherData($mysqlClient);
     }
 
 }
@@ -36,6 +45,49 @@ function insertAddressData($mysqlClient, $address_user, $postcode_user, $town_us
     $result->execute();
 }
 
+function insertWeatherData($mysqlClient){
+    $weatherData = getWeatherData($mysqlClient);
+    $weatherData = json_decode($weatherData);
+    $dateTime = $weatherData->hourly->time;
+    $temperature = $weatherData->hourly->temperature_2m;
+    $humidity = $weatherData->hourly->relativehumidity_2m;
+    $precipitation = $weatherData->hourly->precipitation;
+    //$rain = $weatherData->hourly->rain;
+    $rain = 0;
+    for($i=0; $i<7; $i++){
+        $dateTimeTmp = array_slice($dateTime, $i*24, 24);
+        $temperatureTmp = array_slice($temperature, $i*24, 24);
+            $minTempTmp = min($temperatureTmp);
+            $maxTempTmp = max($temperatureTmp);
+        $humidityTmp = array_slice($humidity, $i*24, 24);
+            $minHumidityTmp = min($humidityTmp);
+            $maxHumidityTmp = max($humidityTmp);
+        $precipitationTmp = array_slice($precipitation, $i*24, 24);
+            $rain = max($precipitationTmp);
+        /*
+        foreach($precipitationTmp as $key => $value){
+            if($value > 0.3){
+                $rain = true;
+                break;
+            }
+        }*/
+
+        $sqlQuery = "SELECT * FROM weather_data WHERE date_time = '$dateTimeTmp[0]'";
+        $result = $mysqlClient->prepare($sqlQuery);
+        $result->execute();
+        $result = $result->fetchAll();
+        // get stored data for the day
+        if(count($result) == 0){
+            // if no data for the day, insert it
+            $sqlQuery = "INSERT INTO weather_data (date_time, min_temperature, max_temperature, min_humidity, max_humidity, rain) VALUES ('$dateTimeTmp[0]', '$minTempTmp', '$maxTempTmp', '$minHumidityTmp', '$maxHumidityTmp', '$rain')";
+            $result = $mysqlClient->prepare($sqlQuery);
+            $result->execute();
+        }
+    }
+
+}
+
+
 function updateAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user){
     $user_location = getLocation($address_user, $town_user, $postcode_user);
     $longitude_user = $user_location["features"][0]["geometry"]["coordinates"][0];
@@ -45,6 +97,55 @@ function updateAddressData($mysqlClient, $address_user, $postcode_user, $town_us
     $result->execute();
 }
 
+function updateWeatherData($mysqlClient){
+    $weatherData = getWeatherData($mysqlClient);
+    $weatherData = json_decode($weatherData);
+    $dateTime = $weatherData->hourly->time;
+    $temperature = $weatherData->hourly->temperature_2m;
+    $humidity = $weatherData->hourly->relativehumidity_2m;
+    $precipitation = $weatherData->hourly->precipitation;
+    //$rain = $weatherData->hourly->rain;
+    $rain = 0;
+    for($i=0; $i<7; $i++){
+        $dateTimeTmp = array_slice($dateTime, $i*24, 24);
+        $temperatureTmp = array_slice($temperature, $i*24, 24);
+            $minTempTmp = min($temperatureTmp);
+            $maxTempTmp = max($temperatureTmp);
+        $humidityTmp = array_slice($humidity, $i*24, 24);
+            $minHumidityTmp = min($humidityTmp);
+            $maxHumidityTmp = max($humidityTmp);
+        $precipitationTmp = array_slice($precipitation, $i*24, 24);
+            $rain = max($precipitationTmp);
+        /*
+        foreach($precipitationTmp as $key => $value){
+            if($value > 0.3){
+                $rain = true;
+                break;
+            }
+        }*/
+
+        $sqlQuery = "SELECT * FROM weather_data WHERE date_time = '$dateTimeTmp[0]'";
+        $result = $mysqlClient->prepare($sqlQuery);
+        $result->execute();
+        $result = $result->fetchAll();
+        // get stored data for the day
+        if(count($result) == 0){
+            // if no data for the day, insert it
+            $sqlQuery = "INSERT INTO weather_data (date_time, min_temperature, max_temperature, min_humidity, max_humidity, rain) VALUES ('$dateTimeTmp[0]', '$minTempTmp', '$maxTempTmp', '$minHumidityTmp', '$maxHumidityTmp', '$rain')";
+            $result = $mysqlClient->prepare($sqlQuery);
+            $result->execute();
+        }else{
+            // if data for the day, update it
+            $sqlQuery = "UPDATE weather_data SET minTemp=$minTempTmp, maxTemp=$maxTempTmp, minHumidity=$minHumidityTmp, maxHumidity=$maxHumidityTmp, rain=$rain WHERE date_time='$dateTimeTmp[0]'";
+            $result = $mysqlClient->prepare($sqlQuery);
+            $result->execute();
+        }
+
+    }
+    
+
+}
+
 function getAddressData($mysqlClient){
     $sqlQuery = "SELECT * FROM user_location";
     $result = $mysqlClient->prepare($sqlQuery);
@@ -52,6 +153,18 @@ function getAddressData($mysqlClient){
     $resultAddressData = $result->fetchAll();
     
     return $resultAddressData;
+}
+
+function getWeatherDataSummaryDB($mysqlClient){
+    $currentDate = (array) new DateTime('today midnight');
+    $currentDate = $currentDate['date'];
+
+    $sqlQuery = "SELECT * FROM `weather_data` WHERE date_time>='$currentDate'";
+    $result = $mysqlClient->prepare($sqlQuery);
+    $result->execute();
+    $resultWeatherData = $result->fetchAll();
+    
+    return $resultWeatherData;
 }
 
 
