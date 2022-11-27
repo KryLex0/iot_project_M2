@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  Dim 13 nov. 2022 à 19:37
+-- Généré le :  Dim 27 nov. 2022 à 20:38
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -38,12 +38,26 @@ CREATE TABLE IF NOT EXISTS `user_location` (
   `longitude_user` float NOT NULL DEFAULT 0,
   `latitude_user` float NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
 
 --
--- Déchargement des données de la table `user_location`
+-- Structure de la table `weather_data`
 --
 
+DROP TABLE IF EXISTS `weather_data`;
+CREATE TABLE IF NOT EXISTS `weather_data` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_time` datetime NOT NULL,
+  `minTemp` float NOT NULL,
+  `maxTemp` float NOT NULL,
+  `minHumidity` int(11) NOT NULL,
+  `maxHumidity` int(11) NOT NULL,
+  `rain` float NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
