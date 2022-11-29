@@ -18,10 +18,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
         $country_user = $postData["country_user"];
 
         checkAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user);
-
+        // insertWeatherData($mysqlClient);
         unset($_POST);
         unset($_REQUEST);
-        header("Location: index.php");
+        //header("Location: index.php");
     } catch (Exception $e) {
         // En cas d'erreur, on affiche un message et on arrête tout
         die('Erreur : ' . $e->getMessage());

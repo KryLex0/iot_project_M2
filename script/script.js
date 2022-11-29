@@ -318,7 +318,9 @@ function generateChart(weatherData, chartType, stripLineData){
           text: "(next 7 days)"
         }],
         axisY: {
-          suffix: " °C"
+          suffix: "",
+          maximum: 1,
+          minimum: 0,
         },
         axisX: {
           stripLines: stripLineData
