@@ -134,7 +134,7 @@ function updateWeatherData($mysqlClient){
         // get stored data for the day
         if(count($result) == 0){
             // if no data for the day, insert it
-            $sqlQuery = "INSERT INTO weather_data (date_time, min_temperature, max_temperature, min_humidity, max_humidity, rain) VALUES ('$dateTimeTmp[0]', '$minTempTmp', '$maxTempTmp', '$minHumidityTmp', '$maxHumidityTmp', '$rain')";
+            $sqlQuery = "INSERT INTO weather_data (date_time, minTemp, maxTemp, minHumidity, maxHumidity, rain) VALUES ('$dateTimeTmp[0]', $minTempTmp, $maxTempTmp, $minHumidityTmp, $maxHumidityTmp, $rain)";
             $result = $mysqlClient->prepare($sqlQuery);
             $result->execute();
         }else{
