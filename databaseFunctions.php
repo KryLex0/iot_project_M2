@@ -34,7 +34,6 @@ if(isset($_POST["refresh"])){
     updateWeatherData($mysqlClient);
 }
 
-
 function checkAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user){
     //$resultAddressData = getAddressData($mysqlClient);
     /*
