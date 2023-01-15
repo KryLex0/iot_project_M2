@@ -32,40 +32,71 @@ $addressData = getAddressData($mysqlClient);
    <div class="containerDiv">
       <div class="container homePage">
          <p>HOME PAGE</p>
-         <div id="chartContainerSummary" style="height: auto; width: auto;"></div>
+         <button onclick="refreshWeatherData()">Actualiser</button>
+         <?php 
+         if(!empty($addressData)){
+         ?>
+            <label>Date de début</label>   
+            <input type="date" style="width:100px" name="inputChartDateStart" id="inputChartDateStart">
+            <label>Date de fin</label>
+            <input type="date" style="width:100px" name="inputChartDateEnd" id="inputChartDateEnd">
+            <button onclick="switchChartDate()">Rechercher</button>
+
+            <div id="chartContainerSummary" style="height: 360px; width: 100%;"></div>
+            <div>
+
+            <?php
+            if(checkRainNextDays($mysqlClient)){
+               echo "<p style='color:darkred'>Attention, il pleut dans les prochains jours!</p>";
+            }else{
+               echo "<p style='color:darkgreen'>Il ne pleut pas dans les prochains jours!</p>";
+            }
+            
+            ?>
+            </div>
+
 
          <?php
-         
-         $mysqlClient = $mysqlClient;
-         //updateWeatherData($mysqlClient);
-         
+         }else{?>
+            <div class='menuPage divSearchBar' style="margin-top:10%;">
+               <p style='color:darkred'>Vous n'avez pas encore ajouté d'adresse!</p>
+               <p style='color:darkred'>Veuillez visiter le menu afin d'y ajouter votre adresse.</p>
+
+            </div>
+         <?php
+         }         
          ?>
       </div>
 
       <div class="container graphPage" id="graphPage" style="display: none;">
          <p>PAGE graphique</p>
-         <label for="labelChartType">Choix des données à afficher</label>
 
-         <select name="selectChartType" id="selectChartType" onchange="switchChartType()">
-            <option value="temperature" selected>Température</option>
-            <option value="humidity">Humidité</option>
-            <!-- <option value="windspeed">Vent</option> -->
-            <option value="precipitation">Précipitation</option>
-         </select>
-         <br>
-         <label>Date de début</label>   
-         <input type="date" style="width:100px" name="inputChartDate" id="inputChartDate" onchange="switchChartDate()">
-         <label>Date de fin</label>
-         <input type="date" style="width:100px" name="inputChartDateEnd" id="inputChartDateEnd" onchange="switchChartDate()">
-         <?php
-         //$weatherArrayData = getWeatherData($mysqlClient);
-         //print_r($weatherArrayData["hourly"]["time"]); //heures 7 jours
-         //print_r($weatherArrayData); //temperature 7 jours
-         //print_r($weatherArrayData["hourly"]["relativehumidity_2m"]); //humidity 7 jours
-         //print_r($weatherArrayData["hourly"]["windspeed_10m"]); //vent 7 jours
+         <?php 
+         if(!empty($addressData)){
          ?>
-         <div id="chartContainer" style="height: auto; width: auto;"></div>
+            <label for="labelChartType">Choix des données à afficher</label>
 
+            <select name="selectChartType" id="selectChartType" onchange="switchChartType()">
+               <option value="temperature" selected>Température</option>
+               <option value="humidity">Humidité</option>
+               <!-- <option value="windspeed">Vent</option> -->
+               <option value="precipitation">Précipitation</option>
+            </select>
+            
+            <div id="chartContainer" style="height: 360px; width: 100%; margin-top:5%;"></div>
+
+         <?php
+         }else{?>
+            <div class="divSearchBar" style="margin-top:10%;">
+               <p style='color:darkred'>Vous n'avez pas encore ajouté d'adresse!</p>
+               <p style='color:darkred'>Veuillez visiter le menu afin d'y ajouter votre adresse.</p>
+
+            </div>
+         <?php
+         }         
+         ?>
+         
+         
       </div>
 
       <div class="container menuPage divSearchBar" style="display: none;">
