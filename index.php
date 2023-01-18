@@ -16,8 +16,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
         $postcode_user = $postData["postcode_user"];
         $town_user = $postData["town_user"];
         $country_user = $postData["country_user"];
+        $email_user = $postData["email_user"];
 
-        checkAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user);
+        checkAddressData($mysqlClient, $address_user, $postcode_user, $town_user, $country_user, $email_user);
         // insertWeatherData($mysqlClient);
         unset($_POST);
         unset($_REQUEST);
@@ -27,12 +28,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST)) {
         die('Erreur : ' . $e->getMessage());
     }
 }
-
-
-
-
-
-
-
-
-?>

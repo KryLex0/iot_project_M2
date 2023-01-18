@@ -418,7 +418,7 @@ function getChartSummary(dateStart, dateEnd) {
     minTempSummary = 0;
 
     //const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const dayName = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];    
+    const dayName = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
     const currentDate = new Date().toISOString().slice(0, 10) + " 00:00:00";
 
     //console.log(dayDate);
@@ -433,13 +433,13 @@ function getChartSummary(dateStart, dateEnd) {
     var i = 0;
 
     for (const data1 in reponse) {
-      if(data1 == 0){
+      if (data1 == 0) {
         document.getElementById("inputChartDateStart").value = reponse[data1].date_time.slice(0, 10);
       }
-      if (data1 == reponse.length - 1){
+      if (data1 == reponse.length - 1) {
         document.getElementById("inputChartDateEnd").value = reponse[data1].date_time.slice(0, 10);
       }
-        //reponse[data1]
+      //reponse[data1]
 
       //init stripLine with first day of week
       dateFormated = new Date(Date.parse(reponse[data1].date_time));
@@ -478,7 +478,7 @@ function getChartSummary(dateStart, dateEnd) {
                 };
               }
               */
-      
+
       //console.log(currentDate + " AND " + reponse[data1].date_time);
       if (reponse[data1].date_time == currentDate) {
         //console.log("currentDate");
@@ -492,7 +492,7 @@ function getChartSummary(dateStart, dateEnd) {
       } else {
         //console.log("not currentDate");
         dataToPush = {
-          y: [+(reponse[data1].minTemp), +(reponse[data1].maxTemp), +(reponse[data1].minHumidity), +(reponse[data1].maxHumidity) ],
+          y: [+(reponse[data1].minTemp), +(reponse[data1].maxTemp), +(reponse[data1].minHumidity), +(reponse[data1].maxHumidity)],
           label: dayDate,
           name: rainData
         };

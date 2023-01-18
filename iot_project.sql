@@ -22,14 +22,18 @@ SET time_zone = "+00:00";
 -- Base de données :  `iot_project`
 --
 
+CREATE DATABASE IF NOT EXISTS `iot_project`;
+
+USE `iot_project`;
+
 -- --------------------------------------------------------
 
 --
--- Structure de la table `user_location`
+-- Structure de la table `user_data`
 --
 
-DROP TABLE IF EXISTS `user_location`;
-CREATE TABLE IF NOT EXISTS `user_location` (
+DROP TABLE IF EXISTS `user_data`;
+CREATE TABLE IF NOT EXISTS `user_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `address_user` varchar(255) COLLATE utf8_bin NOT NULL,
   `postcode_user` int(11) NOT NULL,
@@ -37,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `user_location` (
   `country_user` varchar(255) COLLATE utf8_bin NOT NULL,
   `longitude_user` float NOT NULL DEFAULT 0,
   `latitude_user` float NOT NULL DEFAULT 0,
+  `email_user` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
