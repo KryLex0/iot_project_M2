@@ -1,0 +1,5 @@
+#open crontab jobs
+crontab -e
+
+#log crontab
+sudo tail -f /var/log/syslog
