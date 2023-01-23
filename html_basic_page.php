@@ -48,9 +48,10 @@ $userData = getUserData($mysqlClient);
 
                <?php
                if (checkRainNextDays($mysqlClient)) {
-                  echo "<p style='color:darkred'>Attention, il pleut dans les prochains jours!</p>";
+                  echo "<center><div style='width:100%;background-color:lightgreen;'><p style='font-size:30px;'>Dans les prochains jours, il va pleuvoir. Nous vous conseillons de sortir vos plantes dehors!</p></div></center>";
+
                } else {
-                  echo "<p style='color:darkgreen'>Il ne pleut pas dans les prochains jours!</p>";
+                  echo "<center><div style='width:100%;background-color:#FFCCCB;'><p style='font-size:30px;'>Dans les prochains jours, il ne va pas pleuvoir. Nous vous conseillons d'arroser vos plantes!</p></div></center>";
                }
 
                ?>
@@ -102,7 +103,7 @@ $userData = getUserData($mysqlClient);
       </div>
 
       <div class="container menuPage divSearchBar" style="display: none;">
-         <h2 style="margin-top:0;margin-bottom:10%">Informations de l'utilisateur</h2>
+         <h2 style="margin-top:0;">Informations de l'utilisateur</h2>
          <?php
 
          if (empty($userData)) {
@@ -116,7 +117,7 @@ $userData = getUserData($mysqlClient);
          <?php
             $formatedAddress = $userData[0]["address_user"] . "</br>" . $userData[0]["postcode_user"] . ", " . $userData[0]["town_user"] . "</br>" . $userData[0]["country_user"];
             echo "<h3>Votre adresse est:</h3><p style='color:green'>" . $formatedAddress . "</p>";
-            echo "<p>Votre adresse email enregistrée est" . $userData["email_user"] . "</p>";
+            echo "<p>Votre adresse email enregistrée est <b><i>" . $userData[0]["email_user"] . "</i></b></p>";
          }
          echo "<p>Vous pouvez modifier votre adresse à tout moment via le formulaire ci-dessous.</p>";
 
