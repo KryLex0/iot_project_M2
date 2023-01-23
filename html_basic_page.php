@@ -31,11 +31,12 @@ $userData = getUserData($mysqlClient);
 <body>
    <div class="containerDiv">
       <div class="container homePage">
-         <p>HOME PAGE</p>
-         <button onclick="refreshWeatherData()">Actualiser</button>
+         <h2>Page d'accueil</h2>
          <?php
          if (!empty($userData)) {
          ?>
+            <button onclick="refreshWeatherData()">Actualiser</button>
+
             <label>Date de début</label>
             <input type="date" style="width:100px" name="inputChartDateStart" id="inputChartDateStart">
             <label>Date de fin</label>
@@ -69,7 +70,8 @@ $userData = getUserData($mysqlClient);
       </div>
 
       <div class="container graphPage" id="graphPage" style="display: none;">
-         <p>PAGE graphique</p>
+         <h2>Météo détaillée</h2>
+
 
          <?php
          if (!empty($userData)) {
@@ -100,7 +102,7 @@ $userData = getUserData($mysqlClient);
       </div>
 
       <div class="container menuPage divSearchBar" style="display: none;">
-         <h1>Informations de l'utilisateur</h1></br>
+         <h2 style="margin-top:0;margin-bottom:10%">Informations de l'utilisateur</h2>
          <?php
 
          if (empty($userData)) {

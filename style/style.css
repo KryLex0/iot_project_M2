@@ -24,18 +24,7 @@ input {
     border-radius: 10px;
     transition: transform 0.2s ease-in-out;
 }
-/*
-.divSearchResult{
-    padding: 50px;
-    width: max-content;
-    margin: 30px auto;
-    background: linear-gradient(white, rgba(200, 240, 250, 0.9));
-    backdrop-filter: blur(10px);
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    transition: transform 0.2s ease-in-out;
-}
-*/
+
 .containerDiv .container{
 	margin: 0px auto;
 	width: 80%;
@@ -47,6 +36,32 @@ canvas {
     border: 1px solid;
 }
 
+
+h2 {
+    width: 100%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    padding: 0;
+    text-align: center;
+}
+h2:after {
+    display: inline-block;
+    margin: 0 0 8px 20px;
+    height: 3px;
+    content: " ";
+    text-shadow: none;
+    background-color: #999;
+    width: 140px;
+}
+h2:before {
+    display: inline-block;
+    margin: 0 20px 8px 0;
+    height: 3px;
+    content: " ";
+    text-shadow: none;
+    background-color: #999;
+    width: 140px;
+}
 
 
 
