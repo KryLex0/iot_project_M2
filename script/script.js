@@ -260,6 +260,9 @@ function generateChart(weatherData, chartType, stripLineData) {
       title: {
         text: "Graphique des températures"
       },
+      subtitles: [{
+        text: "(7 prochains jours)"
+      }], 
       axisY: {
         suffix: " °C"
       },
@@ -311,6 +314,9 @@ function generateChart(weatherData, chartType, stripLineData) {
       title: {
         text: "Graphique de l'humidité"
       },
+      subtitles: [{
+        text: "(7 prochains jours)"
+      }], 
       axisY: {
         suffix: " %",
       },
@@ -330,8 +336,11 @@ function generateChart(weatherData, chartType, stripLineData) {
     var chart = new CanvasJS.Chart("chartContainer", {
       theme: "light2",
       title: {
-        text: "Graphique de la vitesse du vent"
+        text: "Graphique de la vitesse du vent",
       },
+      subtitles: [{
+        text: "(7 prochains jours)"
+      }], 
       axisY: {
         suffix: " km/h"
       },
@@ -361,6 +370,9 @@ function generateChart(weatherData, chartType, stripLineData) {
       title: {
         text: "Graphique de la précipitation"
       },
+      subtitles: [{
+        text: "(7 prochains jours)"
+      }], 
       axisY: {
         suffix: "",
         maximum: 1.1,

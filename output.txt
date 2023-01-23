@@ -1,12 +1,12 @@
 Starting the mail script...
-Receiver email: adam.mkh@hotmail.fr
+Receiver email: user@localhost.fr
 SELECT * FROM weather_data WHERE date_time>='2023/01/23 00:00:00' ORDER BY id ASC LIMIT 3
 Weather data: [(15, datetime.datetime(2023, 1, 23, 0, 0), 0.7, 4.2, 66, 89, 0.0), (16, datetime.datetime(2023, 1, 24, 0, 0), 0.1, 4.7, 70, 93, 0.0), (17, datetime.datetime(2023, 1, 25, 0, 0), -1.7, 0.6, 84, 99, 0.0)]
 0.0
 0.0
 0.0
 It's not raining
-Mail sent to 'adam.mkh@hotmail.fr' with subject 'IOT Project M2 - Prévision météo' and body 'Bonjour,
+Mail sent to 'user@localhost.fr' with subject 'IOT Project M2 - Prévision météo' and body 'Bonjour,
 Dans les prochains jours, il ne va pas pleuvoir. Nous vous conseillons d'arroser vos plantes .
 Cordialement,
 L'équipe IOT Project M2' from 'admin@admin.fr'
@@ -14,13 +14,13 @@ L'équipe IOT Project M2' from 'admin@admin.fr'
 ---------------------------------------------------------------------------------
 
 Starting the mail script...
-Receiver email: adam.mkh@hotmail.fr
+Receiver email: user@localhost.fr
 SELECT * FROM weather_data WHERE date_time>='2023/01/23 00:00:00' ORDER BY id ASC LIMIT 3
 Weather data: [(15, datetime.datetime(2023, 1, 23, 0, 0), 0.7, 4.2, 66, 89, 0.0), (16, datetime.datetime(2023, 1, 24, 0, 0), 0.1, 4.7, 70, 93, 1.0), (17, datetime.datetime(2023, 1, 25, 0, 0), -1.7, 0.6, 84, 99, 0.0)]
 0.0
 1.0
 It's raining
-Mail sent to 'adam.mkh@hotmail.fr' with subject 'IOT Project M2 - Prévision météo' and body 'Bonjour,
+Mail sent to 'user@localhost.fr' with subject 'IOT Project M2 - Prévision météo' and body 'Bonjour,
 Dans les prochains jours, il va pleuvoir. Nous vous conseillons de sortir vos plantes dehors.
 Cordialement,
 L'équipe IOT Project M2' from 'admin@admin.fr'
