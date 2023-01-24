@@ -30,6 +30,7 @@ crontab -e
 ```
 Ajouter la ligne suivante en remplaçant le chemin vers le script python
 > 00 10 * * * /usr/bin/env python3 /path/to/python/script/mail.py
+
 Dans notre example, le fichier `mail.py` sera executé tout les jours à 10h00.
 
 ©KryLex0
